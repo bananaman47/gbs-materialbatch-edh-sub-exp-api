@@ -1,0 +1,43 @@
+materialbatchedhsubexpapi:
+# Listner details
+  http:
+    path: "/MaterialBatchEDHSubscriber_vs0/MaterialBatchEDHSubscriber_vs0_http1"
+
+# API Autodiscovery details
+  api:
+    autodiscovery:
+      id: "15559929"
+      
+# Web Service Consumer details      
+  web:
+    service: "#[vars.wsdlService]"
+    port: "#[vars.wsdlPort]"
+    address: "#[vars.wsdlAddress]"
+    wsdl:
+      name: "#[vars.wsdlName]"
+# WSDL details for web service consumer 
+  wsdl:
+    target:
+      name: "http://10.204.17.88:8087/mockMaterialBatch?wsdl"
+      port: "MaterialBatchClientV1_0SOAP"
+      service: "SubscriberService"
+      address: "http://10.204.17.88:8087/mockMaterialBatch" 
+    source:
+      name: "api/MaterialBatchService.wsdl"
+      port: "MaterialBatchEDHSubscriber_vs0_http1"
+      service: "MaterialBatchEDHSubscriber_vs0"      
+      
+#Logging details          
+  main:
+    organizationId: "amgen"
+    level: "1.0"
+    domainName: "gbs"
+    logSuccessStatus: "Success"
+    logInProcessStatus: "InProgress"
+    logErrorStatus: "Error"
+    integrationId: "INT020"
+    integrationName: "materialBatchEDHSubExpApi" 
+    processType: "materialBatchEDHSubExpApi"
+    sourceSystemId: "SAP"
+    destinationSystemId: "EDH"
+  

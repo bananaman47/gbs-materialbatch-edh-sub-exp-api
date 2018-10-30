@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<munit:config name="materialbatch-edh-sub-exp-api-main-test-suite.xml" />
+	<munit:test name="success-test-suite-api-mainTest" description="Test" doc:id="5b099119-6937-4b94-96ef-d730f0a58534" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when wsc:consume" doc:id="350aa3e8-5baf-426f-8adb-3c21a22e72e5" processor="wsc:consume" />
+		</munit:behavior>
+		<munit:execution >
+			<ee:transform doc:name="setPayload" doc:id="6ff46a6c-4174-4ad5-9467-98123c2c8fa4" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns v1 http://xmlns.amgen.com/enterprise/services/BatchClient/V1
+ns v11 http://xmlns.amgen.com/enterprise/doctypes/MaterialBatch/v1
+ns v2 http://xmlns.amgen.com/enterprise/datatypes/AmgenTypes/v2
+---
+{
+	body: {
+		v1#ProcessMaterialBatch: {
+			v11#AmgenMaterialBatch: {
+				v11#BatchNumber: 123,
+				v11#MaterialNumber:9006471,
+				v11#VendorBatchNumber:1231,
+				v11#Status:"P",
+				v11#BatchCharacteristicsList: {
+					v11#BatchCharacteristic: {
+						v11#ID: "REWORK",
+						v11#Value: "No",
+						v11#Description: "Rework"
+					}
+				},
+				v11#QADDate:"",
+				v11#ManufactureDate:"",
+				v11#ManufactureEndDate: "",
+				v11#ExpirationDate: "",
+				v11#GoodsReceipt: {
+					v11#LastUpdatedDate: ""
+				},
+				v11#Administration: {
+					v2#LastUpdateDate:"",
+					v2#LastUpdatedByWorkforceId:""
+					
+				}				
+			}
+		}
+	}
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="ProcessMaterialBatch:\edhMaterialbatch-soapkit-config" doc:id="36aa8edb-d107-49ac-b53b-98fb8f56e60e" name="ProcessMaterialBatch:\edhMaterialbatch-soapkit-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="bc04d489-a9bf-40bb-a88a-e2b32e823470" expression="#[vars.apiFlowStatus]" is="#[MunitTools::equalTo('Success')]" message="pass"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="error-test-suite-api-mainTest" description="MUnit Error Test" doc:id="ab60b34b-ea0b-439d-8366-96725c7ccfa6">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when wsc:consume" doc:id="9ec95b86-1656-48f9-b99a-c7bb3667dfdd" processor="wsc:consume">
+				<munit-tools:then-return >
+					<munit-tools:error typeId="WSC:INVAILD_WSDL"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution >
+			<ee:transform doc:name="setPayload" doc:id="c4fd6368-306a-43b2-8fbf-52aafbbcc125" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns v1 http://xmlns.amgen.com/enterprise/services/BatchClient/V1
+ns v11 http://xmlns.amgen.com/enterprise/doctypes/MaterialBatch/v1
+ns v2 http://xmlns.amgen.com/enterprise/datatypes/AmgenTypes/v2
+---
+{
+	body: {
+		v1#ProcessMaterialBatch: {
+			v11#AmgenMaterialBatch: {
+				v11#BatchNumber: 123,
+				v11#MaterialNumber:9006471,
+				v11#VendorBatchNumber:1231,
+				v11#Status:"P",
+				v11#BatchCharacteristicsList: {
+					v11#BatchCharacteristic: {
+						v11#ID: "REWORK",
+						v11#Value: "No",
+						v11#Description: "Rework"
+					}
+				},
+				v11#QADDate:"",
+				v11#ManufactureDate:"",
+				v11#ManufactureEndDate: "",
+				v11#ExpirationDate: "",
+				v11#GoodsReceipt: {
+					v11#LastUpdatedDate: ""
+				},
+				v11#Administration: {
+					v2#LastUpdateDate:"",
+					v2#LastUpdatedByWorkforceId:""
+					
+				}				
+			}
+		}
+	}
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="ProcessMaterialBatch:\edhMaterialbatch-soapkit-config" doc:id="36aa8edb-d107-49ac-b53b-98fb8f56e60e" name="ProcessMaterialBatch:\edhMaterialbatch-soapkit-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="bc04d489-a9bf-40bb-a88a-e2b32e823470" expression="#[vars.apiFlowStatus]" is="#[MunitTools::equalTo('Error')]" message="pass"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

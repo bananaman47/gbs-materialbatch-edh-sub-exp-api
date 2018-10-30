@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit-soap="http://www.mulesoft.org/schema/mule/apikit-soap" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/apikit-soap http://www.mulesoft.org/schema/mule/apikit-soap/current/mule-apikit-soap.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+<apikit-soap:config name="edhMaterialbatch-soapkit-config" doc:name="APIKit for SOAP Configuration" doc:id="d5a9125c-d595-438b-b37f-6a18fd3241c5" wsdlLocation="${materialbatchedhsubexpapi.wsdl.source.name}" service="${materialbatchedhsubexpapi.wsdl.source.service}" port="${materialbatchedhsubexpapi.wsdl.source.port}" soapVersion="SOAP12"/>
+    <api-gateway:autodiscovery apiId="${materialbatchedhsubexpapi.api.autodiscovery.id}" doc:name="API Autodiscovery MaterialBatch" doc:id="3eb2f1f9-d63a-49fb-99be-2c242dbac0a8" flowRef="edhMaterialbatchRouter" />
+	<flow name="edhMaterialbatchRouter">
+        <http:listener path="${materialbatchedhsubexpapi.http.path}" config-ref="httpListener">
+            <http:response statusCode="#[vars.httpStatus default 200]" />
+			<http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <apikit-soap:router config-ref="edhMaterialbatch-soapkit-config">
+            <apikit-soap:attributes><![CDATA[#[
+              %dw 2.0
+              output application/java
+              ---
+              {
+                  headers: attributes.headers,
+                  method: attributes.method,
+                  queryString: attributes.queryString
+            }]]]></apikit-soap:attributes>
+        </apikit-soap:router>
+    </flow>
+    <flow name="ProcessMaterialBatch:\edhMaterialbatch-soapkit-config">
+		<flow-ref doc:name="materialBatchEDHSubExpApiProcessMaterialBatchPrivateFlow" doc:id="ccd780bf-f7f6-4f8c-86ef-34ab5b1b8690" name="materialBatchEDHSubExpApiProcessMaterialBatchPrivateFlow"/>
+    </flow>
+</mule>

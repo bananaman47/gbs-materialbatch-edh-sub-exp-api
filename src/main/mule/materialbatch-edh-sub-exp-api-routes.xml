@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd 
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd 
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd 
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<flow name="materialBatchEDHSubExpApiProcessMaterialBatchPrivateFlow" doc:id="60a0573e-4956-4cfc-b0ca-b120744b7185" >
+		<flow-ref doc:name="materialBatchEDHSubExpApiSetLoggingVariablesSubFlow" doc:id="40c1e64d-3ee7-4e68-88ba-f498ec517268" name="materialBatchEDHSubExpApiSetLoggingVariablesSubFlow"/>
+		<ee:transform doc:name="setWsdlVariables" doc:id="4d00efc9-339e-4f90-b950-f78d9b078a51" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="wsdlService" ><![CDATA[%dw 2.0
+output application/java
+---
+p('materialbatchedhsubexpapi.wsdl.target.service')]]></ee:set-variable>
+				<ee:set-variable variableName="wsdlPort" ><![CDATA[%dw 2.0
+output application/java
+---
+p('materialbatchedhsubexpapi.wsdl.target.port')]]></ee:set-variable>
+				<ee:set-variable variableName="wsdlAddress" ><![CDATA[%dw 2.0
+output application/java
+---
+p('materialbatchedhsubexpapi.wsdl.target.address')]]></ee:set-variable>
+				<ee:set-variable variableName="wsdlName" ><![CDATA[%dw 2.0
+output application/java
+---
+p('materialbatchedhsubexpapi.wsdl.target.name')]]></ee:set-variable>
+				<ee:set-variable variableName="wsdlOperation" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.operationType]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="setExecutionPointAndLogMsg" doc:id="87dd2493-e7f6-4537-9208-0791e82b3434">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="loggingMessage"><![CDATA[%dw 2.0
+output application/java
+---
+"Starting request for Process Material Price"]]></ee:set-variable>
+				<ee:set-variable variableName="logExecutionPoint"><![CDATA[%dw 2.0
+output application/java
+---
+"Execution started for : materialBatchEDHSubExpApiProcessMaterialBatchPrivateFlow"]]></ee:set-variable>
+				<ee:set-variable variableName="apiFlowStatus"><![CDATA[%dw 2.0
+output application/java
+---
+p('materialbatchedhsubexpapi.main.logInProcessStatus')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="loggerInfoSubFlow" doc:id="2ced8ba8-cebe-41f3-a4aa-4cd1def1b73b" name="loggerInfoSubFlow" />
+		<ee:transform doc:name="setExecutionPointAndLogMsg" doc:id="54f32ca1-b313-43cb-8aa0-02ddb86d8a7c" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="loggingMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+"Execution started before creating target payload"]]></ee:set-variable>
+				<ee:set-variable variableName="logExecutionPoint" ><![CDATA[%dw 2.0
+output application/java
+---
+"Execution in progress for : materialBatchEDHSubExpApiProcessMaterialBatchPrivateFlow"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="loggerDebugSubFlow" doc:id="845427f8-8adf-4c42-a537-9008e4a809b7" name="loggerDebugSubFlow"/>
+		<ee:transform doc:name="setTargetPaylaod" doc:id="5b74ab51-35b0-4aef-a274-4798b4398078">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns v1 http://xmlns.amgen.com/enterprise/services/BatchClient/V1
+ns v11 http://xmlns.amgen.com/enterprise/doctypes/MaterialBatch/v1
+ns v2 http://xmlns.amgen.com/enterprise/datatypes/AmgenTypes/v2
+---
+vars.originalPayload
+
+	
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="setExecutionPointAndLogMsg" doc:id="048dc47f-75d4-4295-ac40-cbabae4ee914" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="loggingMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+"Execution end after creating canonical payload for target  and before sending request soapTarget"]]></ee:set-variable>
+				<ee:set-variable variableName="logExecutionPoint" ><![CDATA[%dw 2.0
+output application/java
+---
+"Execution in progress for : materialBatchEDHSubExpApiProcessMaterialBatchPrivateFlow"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="loggerDebugSubFlow" doc:id="161bbd39-87c7-429a-92c8-52b4e39c0adc" name="loggerDebugSubFlow"/>
+		<flow-ref doc:name="amgenApiCommonWebServiceConsumerSubFlow" doc:id="d5c0f221-a7b7-48ba-bbf9-ac5ea93e96c2" name="amgenApiCommonWebServiceConsumerSubFlow"/>
+		<ee:transform doc:name="setResponsePayload" doc:id="d123311a-3bbb-4c2e-8610-cf873bb9499d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+info:"Message processed Successfully"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="setExecutionPointAndLogMsg" doc:id="290cdcaf-1b8d-4fe4-9e74-d1626d743e54" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="loggingMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+"Ending request for  Process Material Price on soapTarget"]]></ee:set-variable>
+				<ee:set-variable variableName="logExecutionPoint" ><![CDATA[%dw 2.0
+output application/java
+---
+"Execution ended for : materialBatchEDHSubExpApiProcessMaterialBatchPrivateFlow"]]></ee:set-variable>
+				<ee:set-variable variableName="apiFlowStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+p('materialbatchedhsubexpapi.main.logSuccessStatus')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="loggerInfoSubFlow" doc:id="0caec3db-5aea-4bb8-b260-5a938362bdd9" name="loggerInfoSubFlow"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="99ee12e3-f9bd-492b-80a5-253d1d076e0a" >
+				<flow-ref doc:name="amgenApiLogExceptionSubFlow" doc:id="c8f19fd5-4a46-4245-a873-8494ccdf2616" name="amgenApiLogExceptionSubFlow"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>	
+
+</mule>

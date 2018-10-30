@@ -1,0 +1,12 @@
+{
+  "minMuleVersion": "4.1.3",
+  "secureProperties": ["encryption.key"] ,
+     "classLoaderModelLoaderDescriptor": {
+        "id": "mule",
+        "attributes": {
+            "exportedResources": [
+                "/api/MaterialBatchService.wsdl"
+            ]
+        }
+    }
+}
