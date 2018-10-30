@@ -16,7 +16,93 @@
 		<app.runtime>4.1.3</app.runtime>
 		<mule.maven.plugin.version>3.1.6</mule.maven.plugin.version>
 	<munit.version>2.1.3</munit.version>
+	<username>devdeploy</username>
+	<password>Appdeploy@5</password>
     </properties>
+	
+<profiles>
+		<!--prod profile-->
+		<profile>
+			<id>chdev</id>
+			<build>
+				<plugins>
+					<plugin>
+					<groupId>org.mule.tools.maven</groupId>
+					<artifactId>mule-maven-plugin</artifactId>
+					<version>3.1.2</version>
+					<extensions>true</extensions>
+
+					<configuration>
+						<cloudHubDeployment>
+								<uri>https://anypoint.mulesoft.com</uri>
+								<muleVersion>${app.runtime}</muleVersion>
+								<username>${username}</username>
+								<password>${password}</password>
+								<applicationName>materialBatch</applicationName>
+								<environment>Dev</environment>
+								<workerType>Micro</workerType>
+								<properties>
+										<key>value</key>
+								</properties>
+						</cloudHubDeployment>
+					</configuration>
+					<executions>
+							<execution>
+									<id>deploy</id>
+									<phase>deploy</phase>
+									<goals>
+											<goal>deploy</goal>
+									</goals>
+							</execution>
+					</executions>
+					</plugin>
+					</plugins>
+				<testResources>
+						<testResource>
+							<directory>src/test/munit</directory>
+						</testResource>
+					<testResource>
+							<directory>src/test/resources</directory>
+						</testResource>
+					</testResources>
+				</build>
+				<repositories>
+
+
+		          <repository>
+		            <id>anypoint-exchange</id>
+		            <name>Anypoint Exchange</name>
+		            <url>https://maven.anypoint.mulesoft.com/api/v1/maven</url>
+		            <layout>default</layout>
+		        </repository>
+		        <repository>
+		            <id>mulesoft-releases</id>
+		            <name>MuleSoft Releases Repository</name>
+		            <url>https://repository.mulesoft.org/releases/</url>
+		            <layout>default</layout>
+		        </repository>
+		        <repository>
+				<id>MuleRepository</id>
+				<name>MuleRepository</name>
+				<url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+				<layout>default</layout>
+				<releases>
+					<enabled>true</enabled>
+				</releases>
+				<snapshots>
+					<enabled>true</enabled>
+				</snapshots>
+			</repository>
+   			 </repositories>
+			<distributionManagement>
+					<repository>
+					<id>chdev</id>
+					<name>munit-demo</name>
+					<url>https://anypoint.mulesoft.com</url>
+					</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
